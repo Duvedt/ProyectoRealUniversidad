@@ -1,0 +1,274 @@
+/*
+ * =============================================================================
+ * CRUD DE DOCENTES - GLASSMORPHISM CON CONTRASTE OPTIMIZADO
+ * =============================================================================
+ */
+
+:root {
+  /* Paleta Holográfica y Eléctrica */
+  --neon-cyan: #00f2fe;
+  --neon-purple: #4facfe;
+  --neon-pink: #ff007f;
+  --text-main: #ffffff;
+  --text-muted: #94a3b8;
+  
+  /* Componentes de Cristal Líquido */
+  --glass-core: rgba(15, 23, 42, 0.55); /* Un pelín más opaco para proteger el texto */
+  --glass-sheet: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  
+  /* Nuevos colores de acción de alto contraste */
+  --accent-edit: #f59e0b;        /* Amarillo/Ámbar eléctrico */
+  --accent-edit-glow: #fbbf24;   /* Brillo amarillo */
+  --accent-delete: #ff4757;      /* Rojo/Coral intenso */
+}
+
+/* 
+ * FONDO DE AURORAS REDIRECCIONADO
+ * Se mueven solo en el lado izquierdo y central, dejando el lado derecho 
+ * más oscuro para que la tabla y sus botones resalten perfectamente.
+ */
+body {
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background-color: #030712;
+  margin: 0;
+  padding: 40px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  position: relative;
+}
+
+body::before,
+body::after {
+  content: "";
+  position: absolute;
+  width: 450px;
+  height: 450px;
+  border-radius: 50%;
+  filter: blur(130px);
+  z-index: -1;
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+/* Orbe 1: Superior Izquierda */
+body::before {
+  background: var(--neon-cyan);
+  top: -5%;
+  left: -5%;
+  animation: floatLeftOrb 10s infinite alternate ease-in-out;
+}
+
+/* Orbe 2: Inferior Izquierda/Centro */
+body::after {
+  background: var(--neon-pink);
+  bottom: 10%;
+  left: 15%;
+  animation: floatLeftOrb 14s infinite alternate-reverse ease-in-out;
+}
+
+@keyframes floatLeftOrb {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(60px, 40px) scale(1.15); }
+}
+
+/* TARJETA MATRIZ (.App) */
+.App {
+  width: 100%;
+  max-width: 1200px;
+  background: var(--glass-core);
+  backdrop-filter: blur(30px) saturate(210%);
+  -webkit-backdrop-filter: blur(30px) saturate(210%);
+  padding: 40px;
+  border-radius: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 
+    0 20px 50px rgba(0, 0, 0, 0.6),
+    0 0 60px rgba(0, 242, 254, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 35px;
+  color: var(--text-main);
+  position: relative;
+}
+
+/* Encabezado */
+.app-header {
+  text-align: center;
+}
+
+.app-header h1 {
+  margin: 0 0 10px;
+  font-size: 2.5rem;
+  font-weight: 900;
+  letter-spacing: -1px;
+  background: linear-gradient(135deg, #fff 40%, var(--neon-cyan) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.app-subtitle {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* FORMULARIO (.datos) */
+.datos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 25px;
+  padding: 30px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 20px;
+  border: 1px solid var(--glass-border);
+}
+
+.datos label {
+  display: flex;
+  flex-direction: column;
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--neon-cyan);
+}
+
+.datos input {
+  margin-top: 10px;
+  padding: 14px 18px;
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  font-size: 16px;
+  background: rgba(0, 0, 0, 0.4);
+  color: var(--text-main);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.datos input:focus {
+  outline: none;
+  border-color: var(--neon-cyan);
+  background: rgba(0, 0, 0, 0.6);
+  box-shadow: 0 0 20px rgba(0, 242, 254, 0.25);
+  transform: translateY(-2px);
+}
+
+.datos button {
+  grid-column: 1 / -1;
+  padding: 16px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(90deg, var(--neon-purple), var(--neon-cyan));
+  color: #030712;
+  font-weight: 800;
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 30px rgba(0, 242, 254, 0.2);
+}
+
+.datos button:hover {
+  transform: scale(1.01) translateY(-2px);
+  box-shadow: 0 0 40px rgba(0, 242, 254, 0.5);
+  filter: brightness(1.2);
+}
+
+/* TABLA DE REGISTROS DE ALTO CONTRASTE */
+.tabla-container {
+  overflow-x: auto;
+  border-radius: 20px;
+  border: 1px solid var(--glass-border);
+  background: rgba(5, 5, 10, 0.4); /* Fondo más oscuro para proteger los botones */
+}
+
+.tabla-registros {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.tabla-registros th {
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--text-muted);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 1.5px;
+  border-bottom: 2px solid var(--glass-border);
+}
+
+.tabla-registros td {
+  padding: 20px;
+  color: rgba(255, 255, 255, 0.9);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.tabla-registros tbody tr:hover {
+  background: rgba(255, 255, 255, 0.03);
+  box-shadow: inset 4px 0 0 var(--neon-cyan);
+}
+
+/* Celda de Acciones Re-estilizada */
+.tabla-registros td:last-child {
+  display: flex;
+  gap: 12px;
+}
+
+.tabla-registros .btn-editar,
+.tabla-registros .btn-eliminar {
+  padding: 10px 18px; /* Un poco más grandes para mejor usabilidad */
+  border-radius: 8px;
+  font-weight: 800; /* Texto más grueso para legibilidad */
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* EDITAR: Ahora es un Amarillo Eléctrico que destaca muchísimo */
+.tabla-registros .btn-editar {
+  color: var(--accent-edit-glow);
+  background: rgba(245, 158, 11, 0.12); /* Sutil fondo amarillo translúcido */
+  border: 1px solid rgba(245, 158, 11, 0.4);
+}
+
+.tabla-registros .btn-editar:hover {
+  background: var(--accent-edit);
+  color: #030712; /* Texto oscuro para máxima lectura al activar */
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.5);
+  transform: translateY(-2px);
+}
+
+/* ELIMINAR: Rojo Neón Limpio */
+.tabla-registros .btn-eliminar {
+  color: var(--accent-delete);
+  background: rgba(255, 71, 87, 0.12); /* Sutil fondo rojo translúcido */
+  border: 1px solid rgba(255, 71, 87, 0.4);
+}
+
+.tabla-registros .btn-eliminar:hover {
+  background: var(--accent-delete);
+  color: #ffffff;
+  box-shadow: 0 0 20px rgba(255, 71, 87, 0.5);
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  body::before, body::after {
+    width: 220px;
+    height: 220px;
+  }
+  .App {
+    padding: 20px;
+    border-radius: 20px;
+  }
+}
